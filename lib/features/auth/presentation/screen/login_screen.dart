@@ -45,150 +45,151 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFF023D45),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    16,
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(20,20,20,MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      16,
+                    ),
+                  ),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.1),
+                    width: 1.0,
                   ),
                 ),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.1),
-                  width: 1.0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 20,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'E',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 40,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Text(
+                            'Z',
+                            style: TextStyle(
+                                color: Colors.yellow,
+                                fontSize: 40,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            'ezycourse',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 40,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'The Best Online Learning Platform',
+                        style: TextStyle(
+                            color: Colors.yellow,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 20,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'E',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 40,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        Text(
-                          'Z',
-                          style: TextStyle(
-                              color: Colors.yellow,
-                              fontSize: 40,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          'ezycourse',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 40,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      'The Best Online Learning Platform',
-                      style: TextStyle(
-                          color: Colors.yellow,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ],
-                ),
+              SizedBox(
+                height: 80,
               ),
-            ),
-            SizedBox(
-              height: 80,
-            ),
-            Text(
-              'Sign In',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w500),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Email',
+              Text(
+                'Sign In',
                 style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
-                    fontSize: 16,
+                    color: Colors.white,
+                    fontSize: 30,
                     fontWeight: FontWeight.w500),
               ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                  hintText: "olivia@untitledui.com",
+              SizedBox(
+                height: 20,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Email',
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.5),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  hintText: "",
                   hintStyle: TextStyle(color: Colors.white),
                   fillColor: Colors.white.withOpacity(0.1),
-                  filled: true),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Password',
-                style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500),
+                  filled: true,
+                ),
               ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            TextFormField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                  hintText: "Password",
-                  hintStyle: TextStyle(color: Colors.white),
-                  fillColor: Colors.white.withOpacity(0.1),
-                  filled: true),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            SizedBox(
-              width: double.maxFinite,
-              child: ElevatedButton(
-                onPressed: () {
-
-                  loginBloc.add(GetLogin(
-                      payload: LoginRequestParams(
-                          email: 'soniamalik@gmail.com', password: '7654321')));
-
-                },
-                child: const Text("Log In"),
+              SizedBox(
+                height: 20,
               ),
-            ),
-          ],
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Password',
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.5),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                    hintText: "",
+                    hintStyle: TextStyle(color: Colors.white),
+                    fillColor: Colors.white.withOpacity(0.1),
+                    filled: true),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              SizedBox(
+                width: double.maxFinite,
+                child: ElevatedButton(
+                  onPressed: () {
+                    loginBloc.add(GetLogin(payload: LoginRequestParams(email: _emailController.text,password: _passwordController.text)));
+                  },
+                  child: const Text("Log In"),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

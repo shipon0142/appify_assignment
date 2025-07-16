@@ -4,7 +4,7 @@ import 'package:code_base/features/auth/domain/entity/login.dart';
 import 'package:code_base/features/community/domain/entity/feed.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../domain/use_cases/community_usecase.dart';
+import '../../../domain/use_cases/community_usecase.dart';
 
 part 'community_event.dart';
 

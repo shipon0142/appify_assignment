@@ -2,6 +2,7 @@
 
 import 'package:code_base/features/auth/data/req/login_request_params.dart';
 import 'package:code_base/features/auth/data/res/login_response_model/login_response_model.dart';
+import 'package:code_base/features/community/data/req/create_post_request_params.dart';
 import 'package:code_base/features/community/data/res/feed_model/feed_model.dart';
 
 import '../api_service/community_api_service.dart';
@@ -16,6 +17,12 @@ class CommunityDataSource extends ICommunityDataSource {
     required int spaceId,}) async {
     List<FeedModel> feeds = await apiService.getFeeds(communityId: communityId, spaceId: spaceId);
     return feeds;
+  }
+
+  @override
+  Future<dynamic> createPost({required CreatePostParams payload}) async {
+    dynamic result = await apiService.createPost(payload: payload);
+    return result;
   }
 
 }

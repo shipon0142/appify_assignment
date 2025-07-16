@@ -1,7 +1,7 @@
-
 import 'package:code_base/core/network/api_config.dart';
 import 'package:code_base/features/auth/data/req/login_request_params.dart';
 import 'package:code_base/features/auth/data/res/login_response_model/login_response_model.dart';
+import 'package:code_base/features/community/data/req/create_post_request_params.dart';
 import 'package:code_base/features/community/data/res/feed_model/feed_model.dart';
 import 'package:dio/dio.dart';
 
@@ -10,14 +10,13 @@ class CommunityApiService {
 
   CommunityApiService(this._dio);
 
-
   Future<List<FeedModel>> getFeeds({
     required int communityId,
     required int spaceId,
   }) async {
     final formData = FormData.fromMap({
       'community_id': communityId,
-      'space_id'    : spaceId,
+      'space_id': spaceId,
     });
 
     final response = await _dio.post(
@@ -34,4 +33,13 @@ class CommunityApiService {
         .toList();
   }
 
+  Future<dynamic> createPost({
+    required CreatePostParams payload,
+  }) async {
+    final response = await _dio.post(
+      APIConfig.kPostUrl,
+      data: payload,
+    );
+    return response.data;
+  }
 }

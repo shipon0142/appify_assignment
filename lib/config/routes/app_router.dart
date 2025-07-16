@@ -13,10 +13,13 @@ class AppRouter extends RootStackRouter {
           transitionsBuilder: TransitionsBuilders.slideLeft,
           page: DashboardRoute.page,
         ),
-    CustomRoute(
-
+        CustomRoute(
           transitionsBuilder: TransitionsBuilders.slideLeft,
           page: LoginRoute.page,
+        ),
+        CustomRoute(
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          page: CreatePollPostRoute.page,
         ),
       ];
 }

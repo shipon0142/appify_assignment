@@ -9,9 +9,11 @@ class Feed {
   final String? activityType;
   final String? fileType;
   final List<File>? files;
+  final List<LikeType>? likeTypes;
   final int? likeCount;
   final int? commentCount;
   final DateTime? createdAt;
+  final String? publishDate;
   final String? name;
   final String? pic;
   final User? user;
@@ -31,6 +33,15 @@ class Feed {
     this.pic,
     this.user,
     this.meta,
+    this.publishDate,
+    this.likeTypes,
   });
 
+}
+
+class LikeType {
+  final String reactionType;
+  LikeType({
+    required this.reactionType,
+  });
 }

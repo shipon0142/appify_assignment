@@ -1,4 +1,5 @@
 import 'package:code_base/features/community/data/res/file_model/file_model.dart';
+import 'package:code_base/features/community/data/res/like_model/like_type_model.dart';
 import 'package:code_base/features/community/data/res/meta_model/meta_model.dart';
 import 'package:code_base/features/community/data/res/user_model/user_model.dart';
 import 'package:code_base/features/community/domain/entity/feed.dart';
@@ -18,7 +19,9 @@ class FeedModel extends Feed with _$FeedModel {
     List<FileModel>? files,
     @JsonKey(name: 'like_count') int? likeCount,
     @JsonKey(name: 'comment_count') int? commentCount,
+    @JsonKey(name: 'likeType') List<LikeTypeModel>? likeTypes,
     @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'publish_date') String? publishDate,
     String? name,
     String? pic,
     UserModel? user,

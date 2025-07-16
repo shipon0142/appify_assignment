@@ -14,7 +14,8 @@ import 'package:code_base/features/community/data/data_sources/i_community_data_
 import 'package:code_base/features/community/data/repositories/community_repository.dart';
 import 'package:code_base/features/community/domain/repositories/i_community_repository.dart';
 import 'package:code_base/features/community/domain/use_cases/community_usecase.dart';
-import 'package:code_base/features/community/presentation/manager/community_bloc.dart';
+import 'package:code_base/features/community/presentation/manager/community/community_bloc.dart';
+import 'package:code_base/features/community/presentation/manager/post/post_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -22,5 +23,6 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/auth/data/api_service/auth_api_service.dart';
+import '../../features/community/domain/use_cases/create_post_usecase.dart';
 
 part 'di.dart';

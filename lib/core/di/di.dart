@@ -115,6 +115,12 @@ Future<void> injectDependencies() async {
     ),
   );
 
+  injector.registerLazySingleton<CreatePostUseCase>(
+    () => CreatePostUseCase(
+      iRepository: injector(),
+    ),
+  );
+
   ///============================================================================
   ///================================= BLOCS ====================================
   ///============================================================================
@@ -126,6 +132,11 @@ Future<void> injectDependencies() async {
   );
   injector.registerFactory<CommunityBloc>(
     () => CommunityBloc(
+      useCase: injector(),
+    ),
+  );
+  injector.registerFactory<PostBloc>(
+    () => PostBloc(
       useCase: injector(),
     ),
   );
