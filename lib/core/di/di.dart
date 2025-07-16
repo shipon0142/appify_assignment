@@ -16,7 +16,6 @@ Future<void> injectDependencies() async {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-
           handler.next(options);
         },
       ),
@@ -50,10 +49,10 @@ Future<void> injectDependencies() async {
       () => NetworkInfoImpl(InternetConnectionChecker()));
 
   injector.registerSingletonAsync<CacheUtils>(
-          () async => await CacheUtils.getInstance());
+      () async => await CacheUtils.getInstance());
 
   injector.registerSingletonAsync<SharedPreferences>(
-          () async => await SharedPreferences.getInstance());
+      () async => await SharedPreferences.getInstance());
 
   await GetIt.instance.isReady<SharedPreferences>();
 
@@ -92,7 +91,8 @@ Future<void> injectDependencies() async {
       iDataSource: injector(),
       networkInfo: injector(),
     ),
-  );  injector.registerLazySingleton<ICommunityRepository>(
+  );
+  injector.registerLazySingleton<ICommunityRepository>(
     () => CommunityRepository(
       iDataSource: injector(),
       networkInfo: injector(),
@@ -121,6 +121,17 @@ Future<void> injectDependencies() async {
     ),
   );
 
+  injector.registerLazySingleton<CreateCommentUseCase>(
+    () => CreateCommentUseCase(
+      iRepository: injector(),
+    ),
+  );
+  injector.registerLazySingleton<GetCommentsUseCase>(
+    () => GetCommentsUseCase(
+      iRepository: injector(),
+    ),
+  );
+
   ///============================================================================
   ///================================= BLOCS ====================================
   ///============================================================================
@@ -137,6 +148,16 @@ Future<void> injectDependencies() async {
   );
   injector.registerFactory<PostBloc>(
     () => PostBloc(
+      useCase: injector(),
+    ),
+  );
+  injector.registerFactory<CreateCommentBloc>(
+    () => CreateCommentBloc(
+      useCase: injector(),
+    ),
+  );
+  injector.registerFactory<GetCommentsBloc>(
+    () => GetCommentsBloc(
       useCase: injector(),
     ),
   );

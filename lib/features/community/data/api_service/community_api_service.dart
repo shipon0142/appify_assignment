@@ -1,8 +1,11 @@
 import 'package:code_base/core/network/api_config.dart';
 import 'package:code_base/features/auth/data/req/login_request_params.dart';
 import 'package:code_base/features/auth/data/res/login_response_model/login_response_model.dart';
+import 'package:code_base/features/community/data/req/create_comment_request_params.dart';
 import 'package:code_base/features/community/data/req/create_post_request_params.dart';
+import 'package:code_base/features/community/data/res/comment_model/comment_model.dart';
 import 'package:code_base/features/community/data/res/feed_model/feed_model.dart';
+import 'package:code_base/features/community/domain/entity/comment.dart';
 import 'package:dio/dio.dart';
 
 class CommunityApiService {
@@ -39,6 +42,24 @@ class CommunityApiService {
     final response = await _dio.post(
       APIConfig.kPostUrl,
       data: payload,
+    );
+    return response.data;
+  }
+
+  Future<dynamic> createComment({
+    required CreateCommentParams payload,
+  }) async {
+    final response = await _dio.post(
+      APIConfig.kPostCommentUrl,
+      data: payload,
+    );
+    return response.data;
+  }
+  Future<List<CommentModel>> getComments({
+    required int feedId,
+  }) async {
+    final response = await _dio.get(
+      '${APIConfig.kGetCommentUrl}/$feedId',
     );
     return response.data;
   }

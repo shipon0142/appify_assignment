@@ -7,4 +7,6 @@ class APIConfig {
   static const String kLoginUrl = '$kBaseUrl/api/app/student/auth/login';
   static const String kFeedsUrl = '$kBaseUrl/api/app/teacher/community/getFeed?status=feed';
   static const String kPostUrl = '$kBaseUrl/api/app/teacher/community/createFeedWithUpload';
+  static const String kPostCommentUrl = '$kBaseUrl/api/app/student/comment/createComment';
+  static const String kGetCommentUrl = '$kBaseUrl/api/app/student/comment/getComment';
 }
