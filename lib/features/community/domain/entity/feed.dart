@@ -4,6 +4,7 @@ import 'package:code_base/features/community/domain/entity/user.dart';
 
 class Feed {
   final int id;
+  final int userId;
   final String? feedTxt;
   final String? title;
   final String? activityType;
@@ -21,6 +22,7 @@ class Feed {
 
   Feed({
     required this.id,
+    required this.userId,
     this.feedTxt,
     this.title,
     this.activityType,

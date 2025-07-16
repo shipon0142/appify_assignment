@@ -131,6 +131,11 @@ Future<void> injectDependencies() async {
       iRepository: injector(),
     ),
   );
+  injector.registerLazySingleton<CreateReactionUseCase>(
+    () => CreateReactionUseCase(
+      iRepository: injector(),
+    ),
+  );
 
   ///============================================================================
   ///================================= BLOCS ====================================
@@ -158,6 +163,11 @@ Future<void> injectDependencies() async {
   );
   injector.registerFactory<GetCommentsBloc>(
     () => GetCommentsBloc(
+      useCase: injector(),
+    ),
+  );
+  injector.registerFactory<CreateReactionBloc>(
+    () => CreateReactionBloc(
       useCase: injector(),
     ),
   );

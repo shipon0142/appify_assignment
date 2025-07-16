@@ -21,5 +21,9 @@ class AppRouter extends RootStackRouter {
           transitionsBuilder: TransitionsBuilders.slideLeft,
           page: CreatePollPostRoute.page,
         ),
+    CustomRoute(
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          page: FeedRoute.page,
+        ),
       ];
 }

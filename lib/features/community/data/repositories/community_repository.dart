@@ -8,6 +8,7 @@ import 'package:code_base/features/auth/domain/entity/login.dart';
 import 'package:code_base/features/community/data/data_sources/i_community_data_source.dart';
 import 'package:code_base/features/community/data/req/create_comment_request_params.dart';
 import 'package:code_base/features/community/data/req/create_post_request_params.dart';
+import 'package:code_base/features/community/data/req/create_reaction_request_params.dart';
 import 'package:code_base/features/community/domain/entity/comment.dart';
 import 'package:code_base/features/community/domain/entity/feed.dart';
 import 'package:dartz/dartz.dart';
@@ -68,6 +69,22 @@ class CommunityRepository extends ICommunityRepository {
 
     try {
       final result = await iDataSource.createComment(payload: payload);
+      return Right(result);
+    } on Exception catch (error) {
+      return Left(ErrorHandler.handle(error).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> createReaction({
+    required CreateReactionParams payload,
+  }) async {
+    if (!await networkInfo.isConnected) {
+      return Left(DataSource.noInternetConnection.getFailure());
+    }
+
+    try {
+      final result = await iDataSource.createReaction(payload: payload);
       return Right(result);
     } on Exception catch (error) {
       return Left(ErrorHandler.handle(error).failure);

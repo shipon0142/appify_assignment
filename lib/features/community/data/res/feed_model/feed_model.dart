@@ -12,6 +12,7 @@ part 'feed_model.g.dart';
 class FeedModel extends Feed with _$FeedModel {
   const factory FeedModel({
     required int id,
+    @JsonKey(name: 'user_id') required int userId,
     @JsonKey(name: 'feed_txt') String? feedTxt,
     String? title,
     @JsonKey(name: 'activity_type') String? activityType,

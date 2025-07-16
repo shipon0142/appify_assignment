@@ -378,12 +378,12 @@ class _CreatePollPostScreenState extends State<CreatePollPostScreen> {
                           },
                           activeColor: Colors.green,
                           fillColor: MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.selected)) {
-                              return Colors.green;
-                            }
-                            return Colors.white;
-                          }),
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.selected)) {
+                                  return Colors.green;
+                                }
+                                return Colors.white;
+                              }),
                         ),
                       ),
                       SizedBox(

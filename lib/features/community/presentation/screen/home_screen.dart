@@ -1,10 +1,14 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:code_base/core/di/di_import_path.dart';
 import 'package:code_base/core/utility/date_utils.dart';
 import 'package:code_base/features/community/presentation/manager/community/community_bloc.dart';
 import 'package:code_base/features/community/presentation/screen/create_post_screen.dart';
+import 'package:code_base/features/community/presentation/widgets/comment_bottom_sheet_widget.dart';
 import 'package:code_base/features/community/utils/community_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../config/routes/app_router.gr.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    commiunityBloc.add(GetFeeds(communityId: 2914, spaceId: 5883));
+    callCommunity();
     super.initState();
   }
 
@@ -27,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          commiunityBloc.add(GetFeeds(communityId: 2914, spaceId: 5883));
+          callCommunity();
         },
         child: Column(
           children: [
@@ -39,10 +43,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   alignment: Alignment.centerLeft,
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.menu,
-                        size: 30,
-                        color: Colors.white,
+                      InkWell(
+                        onTap: () {
+                          AutoRouter.of(context).push(FeedRoute());
+                        },
+                        child: Icon(
+                          Icons.menu,
+                          size: 30,
+                          color: Colors.white,
+                        ),
                       ),
                       SizedBox(
                         width: 12,
@@ -300,6 +309,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                               children: [
                                                 Row(
                                                   children: [
+                                                    if (CommunityUtils()
+                                                        .getReactionTypes(state
+                                                            .feeds[index]
+                                                            .likeTypes)
+                                                        .isEmpty)
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 2),
+                                                        child: Icon(
+                                                          Icons.thumb_up,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
                                                     for (String reactionType
                                                         in CommunityUtils()
                                                             .getReactionTypes(
@@ -311,12 +335,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .symmetric(
-                                                                horizontal: 4),
+                                                                horizontal: 2),
                                                         child: Icon(
                                                           CommunityUtils()
                                                               .getReactionIcon(
                                                                   reactionType),
-                                                          color: Colors.blue,
+                                                          color: (CommunityUtils()
+                                                                      .getReactionIcon(
+                                                                          reactionType) ==
+                                                                  Icons
+                                                                      .thumb_up)
+                                                              ? Colors.blue
+                                                              : Colors.yellow,
                                                         ),
                                                       ),
                                                   ],
@@ -341,7 +371,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         InkWell(
-                                          onTap: () {},
+                                          onTap: () async {
+                                            bool result = await showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              useSafeArea: true,
+                                              context: context,
+                                              builder: (context) {
+                                                return CommentBottomSheetWidget(
+                                                  feedId: state.feeds[index].id,
+                                                  feedUserId:
+                                                  state.feeds[index].userId,
+                                                );
+                                              },
+                                            );
+                                            if(result){
+                                              callCommunity();
+                                            }
+                                          },
                                           child: Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                               8,
@@ -391,12 +437,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             child: Icon(
                                               Icons.thumb_up,
-                                              color: Colors.blue,
+                                              color: Colors.grey,
                                             ),
                                           ),
                                         ),
                                         InkWell(
-                                          onTap: () {},
+                                          onTap: () async {
+                                           bool result = await showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              useSafeArea: true,
+                                              context: context,
+                                              builder: (context) {
+                                                return CommentBottomSheetWidget(
+                                                  feedId: state.feeds[index].id,
+                                                  feedUserId:
+                                                      state.feeds[index].userId,
+                                                );
+                                              },
+                                            );
+                                           if(result){
+                                             callCommunity();
+                                           }
+                                          },
                                           child: Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                               8,
@@ -448,5 +510,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void callCommunity() {
+    commiunityBloc.add(GetFeeds(communityId: 2914, spaceId: 5883));
   }
 }

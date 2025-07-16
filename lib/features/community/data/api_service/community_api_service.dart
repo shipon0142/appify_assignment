@@ -3,6 +3,7 @@ import 'package:code_base/features/auth/data/req/login_request_params.dart';
 import 'package:code_base/features/auth/data/res/login_response_model/login_response_model.dart';
 import 'package:code_base/features/community/data/req/create_comment_request_params.dart';
 import 'package:code_base/features/community/data/req/create_post_request_params.dart';
+import 'package:code_base/features/community/data/req/create_reaction_request_params.dart';
 import 'package:code_base/features/community/data/res/comment_model/comment_model.dart';
 import 'package:code_base/features/community/data/res/feed_model/feed_model.dart';
 import 'package:code_base/features/community/domain/entity/comment.dart';
@@ -55,12 +56,27 @@ class CommunityApiService {
     );
     return response.data;
   }
+
+  Future<dynamic> createReaction({
+    required CreateReactionParams payload,
+  }) async {
+    final response = await _dio.post(
+      APIConfig.kPostCommentUrl,
+      data: payload,
+    );
+    return response.data;
+  }
+
   Future<List<CommentModel>> getComments({
     required int feedId,
   }) async {
     final response = await _dio.get(
       '${APIConfig.kGetCommentUrl}/$feedId',
     );
-    return response.data;
+    final List<dynamic> raw = response.data as List<dynamic>;
+
+    return   raw
+        .map((e) => CommentModel.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }

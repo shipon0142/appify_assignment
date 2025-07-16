@@ -2,6 +2,7 @@ import 'package:code_base/features/auth/data/req/login_request_params.dart';
 import 'package:code_base/features/auth/data/res/login_response_model/login_response_model.dart';
 import 'package:code_base/features/community/data/req/create_comment_request_params.dart';
 import 'package:code_base/features/community/data/req/create_post_request_params.dart';
+import 'package:code_base/features/community/data/req/create_reaction_request_params.dart';
 import 'package:code_base/features/community/data/res/comment_model/comment_model.dart';
 import 'package:code_base/features/community/data/res/feed_model/feed_model.dart';
 
@@ -33,7 +34,15 @@ class CommunityDataSource extends ICommunityDataSource {
   Future<dynamic> createComment({required CreateCommentParams payload}) async {
     dynamic result = await apiService.createComment(payload: payload);
     return result;
-  }  @override
+  }
+
+  @override
+  Future<dynamic> createReaction({required CreateReactionParams payload}) async {
+    dynamic result = await apiService.createReaction(payload: payload);
+    return result;
+  }
+
+  @override
   Future<List<CommentModel>> getComments({required int feedId}) async {
     dynamic result = await apiService.getComments(feedId: feedId);
     return result;
