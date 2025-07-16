@@ -1,7 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:code_base/core/di/di_import_path.dart';
 import 'package:code_base/core/utility/date_utils.dart';
+import 'package:code_base/features/community/data/req/create_reaction_request_params.dart';
+import 'package:code_base/features/community/domain/entity/feed.dart';
 import 'package:code_base/features/community/presentation/manager/community/community_bloc.dart';
+import 'package:code_base/features/community/presentation/manager/create_reaction/create_reaction_bloc.dart';
 import 'package:code_base/features/community/presentation/screen/create_post_screen.dart';
 import 'package:code_base/features/community/presentation/widgets/comment_bottom_sheet_widget.dart';
 import 'package:code_base/features/community/utils/community_utils.dart';
@@ -19,9 +22,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var commiunityBloc = injector<CommunityBloc>();
+  var createReactionBloc = injector<CreateReactionBloc>();
+  List<Feed> feeds = [];
 
   @override
   void initState() {
+    createReactionBloc.stream.listen((state) async {
+      if (state is CreateReactionSuccess) {
+        callCommunity();
+      }
+    });
     callCommunity();
     super.initState();
   }
@@ -177,321 +187,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     BlocProvider.value(
                       value: commiunityBloc,
                       child: BlocBuilder<CommunityBloc, CommunityState>(
-                        builder: (context, state) {
-                          if (state is CommunitySuccess) {
+                        builder: (context, stat) {
+                          if (stat is CommunitySuccess) {
+                            feeds = stat.feeds;
+                          }
+                          if (feeds.isNotEmpty) {
                             return ListView.separated(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
-                              itemCount: state.feeds.length,
+                              itemCount: feeds.length,
                               separatorBuilder: (context, index) => SizedBox(
                                 height: 18,
                               ),
                               itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Image.network(
-                                              state.feeds[index].user
-                                                      ?.profilePic ??
-                                                  '',
-                                              height: 40,
-                                              width: 40,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  state.feeds[index].user
-                                                          ?.fullName ??
-                                                      '',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 4,
-                                                ),
-                                                Text(
-                                                  DateTimeUtils.timeAgo(state
-                                                          .feeds[index]
-                                                          .publishDate ??
-                                                      ''),
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 14,
-                                                    color: Colors.grey
-                                                        .withOpacity(0.6),
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              40, 8, 0, 8),
-                                          child: Icon(
-                                            Icons.more_vert,
-                                            size: 30,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Divider(
-                                      color: Colors.grey.withOpacity(0.4),
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    RichText(
-                                      textAlign: TextAlign.left,
-                                      // 👈 aligns text to the left
-
-                                      text: TextSpan(
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                          height: 1.6,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text: state.feeds[index].feedTxt ??
-                                                '',
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Image.network(
-                                      state.feeds[index].pic ?? '',
-                                      height: 200,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {},
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                              0,
-                                              8,
-                                              8,
-                                              8,
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    if (CommunityUtils()
-                                                        .getReactionTypes(state
-                                                            .feeds[index]
-                                                            .likeTypes)
-                                                        .isEmpty)
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 2),
-                                                        child: Icon(
-                                                          Icons.thumb_up,
-                                                          color: Colors.grey,
-                                                        ),
-                                                      ),
-                                                    for (String reactionType
-                                                        in CommunityUtils()
-                                                            .getReactionTypes(
-                                                                state
-                                                                    .feeds[
-                                                                        index]
-                                                                    .likeTypes))
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 2),
-                                                        child: Icon(
-                                                          CommunityUtils()
-                                                              .getReactionIcon(
-                                                                  reactionType),
-                                                          color: (CommunityUtils()
-                                                                      .getReactionIcon(
-                                                                          reactionType) ==
-                                                                  Icons
-                                                                      .thumb_up)
-                                                              ? Colors.blue
-                                                              : Colors.yellow,
-                                                        ),
-                                                      ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Text(
-                                                  CommunityUtils.getLikeCount(
-                                                      false,
-                                                      state.feeds[index]
-                                                              .likeCount ??
-                                                          0),
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 11,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () async {
-                                            bool result = await showModalBottomSheet(
-                                              isScrollControlled: true,
-                                              useSafeArea: true,
-                                              context: context,
-                                              builder: (context) {
-                                                return CommentBottomSheetWidget(
-                                                  feedId: state.feeds[index].id,
-                                                  feedUserId:
-                                                  state.feeds[index].userId,
-                                                );
-                                              },
-                                            );
-                                            if(result){
-                                              callCommunity();
-                                            }
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                              8,
-                                              8,
-                                              8,
-                                              0,
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Icon(
-                                                  Icons.messenger_outline,
-                                                  color: Colors.black,
-                                                ),
-                                                SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Text(
-                                                  '${state.feeds[index].commentCount} comments',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 11,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {},
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                              0,
-                                              8,
-                                              8,
-                                              8,
-                                            ),
-                                            child: Icon(
-                                              Icons.thumb_up,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () async {
-                                           bool result = await showModalBottomSheet(
-                                              isScrollControlled: true,
-                                              useSafeArea: true,
-                                              context: context,
-                                              builder: (context) {
-                                                return CommentBottomSheetWidget(
-                                                  feedId: state.feeds[index].id,
-                                                  feedUserId:
-                                                      state.feeds[index].userId,
-                                                );
-                                              },
-                                            );
-                                           if(result){
-                                             callCommunity();
-                                           }
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                              8,
-                                              8,
-                                              8,
-                                              0,
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Icon(
-                                                  Icons.messenger_outline,
-                                                  color: Colors.black,
-                                                ),
-                                                SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Text(
-                                                  'Comment',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
+                                return buildFeeds(index, context);
                               },
                             );
                           } else {
@@ -510,6 +219,287 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Column buildFeeds(int index, BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.network(
+                  feeds[index].user?.profilePic ?? '',
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      feeds[index].user?.fullName ?? '',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      DateTimeUtils.timeAgo(feeds[index].publishDate ?? ''),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.grey.withOpacity(0.6),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(40, 8, 0, 8),
+              child: Icon(
+                Icons.more_vert,
+                size: 30,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 4,
+        ),
+        Divider(
+          color: Colors.grey.withOpacity(0.4),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        RichText(
+          textAlign: TextAlign.left,
+          text: TextSpan(
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              height: 1.6,
+              fontWeight: FontWeight.w400,
+            ),
+            children: [
+              TextSpan(
+                text: feeds[index].feedTxt ?? '',
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Image.network(
+          feeds[index].pic ?? '',
+          height: 200,
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
+        SizedBox(
+          height: 4,
+        ),
+        buildLikeAndComments(index, context),
+        SizedBox(
+          height: 8,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: () {
+                createReactionBloc.add(CreateReaction(
+                    payload: CreateReactionParams(
+                        feedId: feeds[index].id,
+                        reactionType: 'LIKE',
+                        action: 'deleteOrCreate',
+                        reactionSource: 'COMMUNITY')));
+              },
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  0,
+                  8,
+                  8,
+                  8,
+                ),
+                child: Icon(
+                  Icons.thumb_up,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () async {
+                bool result = await showModalBottomSheet(
+                  isScrollControlled: true,
+                  useSafeArea: true,
+                  context: context,
+                  builder: (context) {
+                    return CommentBottomSheetWidget(
+                      feedId: feeds[index].id,
+                      feedUserId: feeds[index].userId,
+                    );
+                  },
+                );
+                if (result) {
+                  callCommunity();
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  8,
+                  8,
+                  8,
+                  0,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.messenger_outline,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      'Comment',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Row buildLikeAndComments(int index, BuildContext context) {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: () {},
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                0,
+                8,
+                8,
+                8,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      if (CommunityUtils()
+                          .getReactionTypes(feeds[index].likeTypes)
+                          .isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          child: Icon(
+                            Icons.thumb_up,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      for (String reactionType in CommunityUtils()
+                          .getReactionTypes(feeds[index].likeTypes))
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          child: Icon(
+                            CommunityUtils().getReactionIcon(reactionType),
+                            color: (CommunityUtils()
+                                        .getReactionIcon(reactionType) ==
+                                    Icons.thumb_up)
+                                ? Colors.blue
+                                : Colors.yellow,
+                          ),
+                        ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    CommunityUtils.getLikeCount(
+                        false, feeds[index].likeCount ?? 0),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () async {
+              bool result = await showModalBottomSheet(
+                isScrollControlled: true,
+                useSafeArea: true,
+                context: context,
+                builder: (context) {
+                  return CommentBottomSheetWidget(
+                    feedId: feeds[index].id,
+                    feedUserId: feeds[index].userId,
+                  );
+                },
+              );
+              if (result) {
+                callCommunity();
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                8,
+                8,
+                8,
+                0,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.messenger_outline,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    '${feeds[index].commentCount} comments',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
   }
 
   void callCommunity() {

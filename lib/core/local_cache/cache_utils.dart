@@ -29,5 +29,8 @@ class CacheUtils {
     String tokenData = _prefs.getString(token)??'';
     return tokenData;
   }
+   clearToken() {
+    _prefs.clear();
+  }
 
 }

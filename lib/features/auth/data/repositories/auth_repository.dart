@@ -37,5 +37,21 @@ class AuthRepository extends IAuthRepository {
       return Left(ErrorHandler.handle(error).failure);
     }
   }
+  @override
+  Future<Either<Failure, dynamic>> logout() async {
+
+
+    if (!await networkInfo.isConnected) {
+      return Left(DataSource.noInternetConnection.getFailure());
+    }
+
+    try {
+      final result =
+      await iDataSource.logout();
+      return Right(result);
+    } on Exception catch (error) {
+      return Left(ErrorHandler.handle(error).failure);
+    }
+  }
 
 }

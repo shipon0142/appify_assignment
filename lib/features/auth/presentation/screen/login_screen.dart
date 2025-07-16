@@ -3,7 +3,7 @@ import 'package:code_base/core/di/di_import_path.dart';
 import 'package:code_base/core/local_cache/cache_utils.dart';
 import 'package:code_base/core/utility/constants/custom_spacing.dart';
 import 'package:code_base/features/auth/data/req/login_request_params.dart';
-import 'package:code_base/features/auth/presentation/manager/login_bloc.dart';
+import 'package:code_base/features/auth/presentation/manager/login/login_bloc.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../config/routes/app_router.gr.dart';

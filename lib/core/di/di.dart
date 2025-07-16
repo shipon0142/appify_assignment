@@ -136,6 +136,11 @@ Future<void> injectDependencies() async {
       iRepository: injector(),
     ),
   );
+  injector.registerLazySingleton<LogoutUseCase>(
+    () => LogoutUseCase(
+      iRepository: injector(),
+    ),
+  );
 
   ///============================================================================
   ///================================= BLOCS ====================================
@@ -168,6 +173,11 @@ Future<void> injectDependencies() async {
   );
   injector.registerFactory<CreateReactionBloc>(
     () => CreateReactionBloc(
+      useCase: injector(),
+    ),
+  );
+  injector.registerFactory<LogoutBloc>(
+    () => LogoutBloc(
       useCase: injector(),
     ),
   );

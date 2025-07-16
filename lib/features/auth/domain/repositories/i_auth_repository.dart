@@ -7,5 +7,6 @@ import 'package:dartz/dartz.dart';
 
 abstract class IAuthRepository {
   Future<Either<Failure, LoginResponseEntity>> login({required LoginRequestParams payload});
+  Future<Either<Failure, dynamic>> logout();
 
 }

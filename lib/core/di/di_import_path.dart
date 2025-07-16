@@ -7,7 +7,9 @@ import 'package:code_base/features/auth/data/data_sources/auth_data_source.dart'
 import 'package:code_base/features/auth/data/repositories/auth_repository.dart';
 import 'package:code_base/features/auth/domain/repositories/i_auth_repository.dart';
 import 'package:code_base/features/auth/domain/use_cases/login_usecase.dart';
-import 'package:code_base/features/auth/presentation/manager/login_bloc.dart';
+import 'package:code_base/features/auth/domain/use_cases/logout_usecase.dart';
+import 'package:code_base/features/auth/presentation/manager/login/login_bloc.dart';
+import 'package:code_base/features/auth/presentation/manager/logout/logout_bloc.dart';
 import 'package:code_base/features/community/data/api_service/community_api_service.dart';
 import 'package:code_base/features/community/data/data_sources/community_data_source.dart';
 import 'package:code_base/features/community/data/data_sources/i_community_data_source.dart';

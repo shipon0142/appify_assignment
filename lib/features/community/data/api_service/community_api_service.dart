@@ -60,12 +60,19 @@ class CommunityApiService {
   Future<dynamic> createReaction({
     required CreateReactionParams payload,
   }) async {
+    final formData = FormData.fromMap(payload.toJson());
+
     final response = await _dio.post(
-      APIConfig.kPostCommentUrl,
-      data: payload,
+      APIConfig.kPostReactionUrl,
+      data: formData,
+      options: Options(
+        contentType: 'multipart/form-data',
+      ),
     );
+
     return response.data;
   }
+
 
   Future<List<CommentModel>> getComments({
     required int feedId,
